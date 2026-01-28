@@ -1,25 +1,42 @@
 import {
-  LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
 } from "recharts";
 
-export default function LineChartView({ data, yKey }) {
+export default function LineChartView({ data, seriesKey }) {
+  // Make chart wider when there are more points
+  const chartWidth = Math.max(700, data.length * 45); // tweak 45 if you want more/less density
+  const chartHeight = 360;
+
   return (
-    <div style={{ height: 360, width: "100%", border: "1px solid #eee", borderRadius: 14, padding: 12 }}>
-      <ResponsiveContainer>
-        <LineChart data={data}>
+    <div
+      style={{
+        width: "100%",
+        overflowX: "auto",
+        overflowY: "hidden",
+        WebkitOverflowScrolling: "touch", // smooth iOS scrolling
+        touchAction: "pan-x",             // allow horizontal swipe
+        border: "1px solid #eee",
+        borderRadius: 14,
+      }}
+    >
+      <div style={{ width: chartWidth }}>
+        <LineChart width={chartWidth} height={chartHeight} data={data}>
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" tick={{ fontSize: 12 }} minTickGap={30} />
-          <YAxis tick={{ fontSize: 12 }} />
+          <XAxis dataKey="date" minTickGap={24} />
+          <YAxis />
           <Tooltip />
           <Line
             type="monotone"
-            dataKey={yKey}
+            dataKey={seriesKey}
             dot={false}
-            strokeWidth={2}
-            connectNulls
           />
         </LineChart>
-      </ResponsiveContainer>
+      </div>
     </div>
   );
 }
