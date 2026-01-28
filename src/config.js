@@ -1,9 +1,11 @@
 export const TABS = [
-  { key: "Inflation", label: "Inflation", file: "/data/Inflation.json" },
-  { key: "Labor", label: "Labor", file: "/data/Labor.json" },
-  { key: "Rates", label: "Rates", file: "/data/Rates.json" },
-  { key: "Financial_Conditions", label: "Financial Conditions", file: "/data/Financial_Conditions.json" },
+  { key: "inflation", label: "Inflation", file: "/data/Inflation.json" },
+  { key: "labor", label: "Labor", file: "/data/Labor.json" },
+  { key: "rates", label: "Rates", file: "/data/Rates.json" },
+  { key: "policy", label: "Policy", file: "/data/Policy.json" }, // ✅ add this
+  { key: "financial", label: "Financial Conditions", file: "/data/Financial_Conditions.json" },
 ];
+
 
 export const RANGES = [
   { key: "1M", label: "1M" },
