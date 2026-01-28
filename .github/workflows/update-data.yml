@@ -1,0 +1,37 @@
+name: Update FRED data
+
+on:
+  schedule:
+    - cron: "0 2 * * *"   # runs daily at 02:00 UTC
+  workflow_dispatch:     # allows manual run
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install pandas requests python-dateutil openpyxl
+
+      - name: Run FRED crawler
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: |
+          python C:\Users\User\Desktop\macro-site\scripts\fred_crawler.py
+
+      - name: Commit and push updated data
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add public/data/*.json
+          git commit -m "auto: update FRED data" || echo "No changes"
+          git push
