@@ -1,4 +1,5 @@
 import {
+  ResponsiveContainer,
   LineChart,
   Line,
   XAxis,
@@ -8,9 +9,10 @@ import {
 } from "recharts";
 
 export default function LineChartView({ data, seriesKey }) {
-  // Make chart wider when there are more points
-  const chartWidth = Math.max(700, data.length * 45); // tweak 45 if you want more/less density
-  const chartHeight = 360;
+  // Wider chart when more points -> allows horizontal scroll
+  const minWidth = 700;
+  const pxPerPoint = 20; // smaller = less wide, bigger = more scroll
+  const chartWidth = Math.max(minWidth, data.length * pxPerPoint);
 
   return (
     <div
@@ -18,24 +20,23 @@ export default function LineChartView({ data, seriesKey }) {
         width: "100%",
         overflowX: "auto",
         overflowY: "hidden",
-        WebkitOverflowScrolling: "touch", // smooth iOS scrolling
-        touchAction: "pan-x",             // allow horizontal swipe
+        WebkitOverflowScrolling: "touch",
+        touchAction: "pan-x",
         border: "1px solid #eee",
         borderRadius: 14,
       }}
     >
-      <div style={{ width: chartWidth }}>
-        <LineChart width={chartWidth} height={chartHeight} data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" minTickGap={24} />
-          <YAxis />
-          <Tooltip />
-          <Line
-            type="monotone"
-            dataKey={seriesKey}
-            dot={false}
-          />
-        </LineChart>
+      {/* This inner div makes the chart actually wider than the screen */}
+      <div style={{ width: chartWidth, height: 380, padding: 12, boxSizing: "border-box" }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data} margin={{ top: 10, right: 20, left: 10, bottom: 10 }}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" minTickGap={28} />
+            <YAxis width={60} />
+            <Tooltip />
+            <Line type="monotone" dataKey={seriesKey} dot={false} />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );
